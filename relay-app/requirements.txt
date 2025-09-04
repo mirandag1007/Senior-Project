@@ -1,0 +1,3 @@
+npm install axios
+pip install djangorestframework-simplejwt
+VSCode dev. install: Tailwind CSS IntelliSense
