@@ -3,7 +3,8 @@ import AuthWindow from '../../components/AuthWindow'
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-900 dark:to-gray-800">
+    // Use a neutral gray background with an orange accent for the overall page.
+    <div className="min-h-screen bg-gray-50 text-gray-800 dark:bg-gray-900 dark:text-gray-200">
       {/* Large Header for Home Page */}
       <Header size="large" />
       
@@ -13,15 +14,16 @@ export default function HomePage() {
           
           {/* Left Side - Description */}
           <div className="flex-1 text-center lg:text-left">
-            <h1 className="text-xl lg:text- xl font-bold text-gray-800 dark:text-white mb-6">
+            {/* Main headline in UTRGV Orange */}
+            <h1 className="text-xl lg:text-xl font-bold text-[#F58220] dark:text-[#BA5100] mb-6">
               Never miss out on notes again!
             </h1>
-            <p className="text-lg lg:text-xl text-gray-600 dark:text-gray-300 mb-8">
+            <p className="text-lg lg:text-xl text-gray-700 dark:text-gray-300 mb-8">
               Record lectures with AI transcription, connect with other classmates,
               and never fall behind in your studies.
             </p>
             
-            {/* Placeholder for your future image */}
+            {/* Placeholder for your future image - styled with gray */}
             <div className="w-full h-64 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center">
               <p className="text-gray-500 dark:text-gray-400"> functionality image will go here</p>
             </div>

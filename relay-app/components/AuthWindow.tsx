@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation'
 import { createBrowserClient } from '@supabase/ssr'
-import { useState, useEffect  } from 'react'
+import { useState, useEffect } from 'react'
 
 
 type AuthMode = 'initial' | 'login' | 'signup'
@@ -28,20 +28,20 @@ export default function AuthWindow() {
 
   //
   useEffect(() => {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+    const supabase = createBrowserClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+    )
 
-  const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN' && session) {
-      router.push('/dashboard')
-    }
-  })
+    const { data: { subscription } } = supabase.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_IN' && session) {
+        router.push('/dashboard')
+      }
+    })
 
-  return () => subscription.unsubscribe()
-}, [router])
-  
+    return () => subscription.unsubscribe()
+  }, [router])
+
   /* ---------- Helpers ---------- */
   const isValidEduEmail = (email: string) =>
     /^[^\s@]+@[^\s@]+\.edu$/.test(email)
@@ -72,58 +72,58 @@ export default function AuthWindow() {
       }
     }
     try {
-  const supabase = createBrowserClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL!,
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-  )
+      const supabase = createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      )
 
-  if (mode === 'signup') {
-    const { error } = await supabase.auth.signUp({
-      email: formData.email,
-      password: formData.password,
-      options: {
-        data: {
-          full_name: formData.name,
+      if (mode === 'signup') {
+        const { error } = await supabase.auth.signUp({
+          email: formData.email,
+          password: formData.password,
+          options: {
+            data: {
+              full_name: formData.name,
+            }
+          }
+        })
+
+        if (error) {
+          setError(error.message)
+          return
         }
+
+        // Success - redirect without blocking alert
+        setSuccessMessage('Account created successfully! Redirecting...')
+
+
+
+      } else {
+        // Login logic
+        const { error } = await supabase.auth.signInWithPassword({
+          email: formData.email,
+          password: formData.password,
+        })
+
+        if (error) {
+          setError(error.message)
+          return
+        }
+
+        // Success - redirect without blocking alert
+
+        setSuccessMessage('Login successful! Redirecting...')
       }
-    })
 
-    if (error) {
-      setError(error.message)
-      return
+    } catch (err) {
+      console.error('Detailed error:', err)
+      if (err instanceof Error) {
+        setError(`An unexpected error occurred: ${err.message}`)
+      } else {
+        setError('An unexpected error occurred: Unknown error')
+      }
     }
 
-    // Success - redirect without blocking alert
-    setSuccessMessage('Account created successfully! Redirecting...')
-  
-
-
-  } else {
-    // Login logic
-    const { error } = await supabase.auth.signInWithPassword({
-      email: formData.email,
-      password: formData.password,
-    })
-
-    if (error) {
-      setError(error.message)
-      return
-    }
-
-    // Success - redirect without blocking alert
-
-    setSuccessMessage('Login successful! Redirecting...')
-  }
-
-} catch (err) {
-  console.error('Detailed error:', err)
-  if (err instanceof Error) {
-    setError(`An unexpected error occurred: ${err.message}`)
-  } else {
-    setError('An unexpected error occurred: Unknown error')
-  }
-}
-    
   }
 
 
@@ -132,7 +132,7 @@ export default function AuthWindow() {
   /* ---------- Initial Screen ---------- */
   if (mode === 'initial') {
     return (
-      <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
+      <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
         <div className="text-center mb-6">
           <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
             Get Started
@@ -145,14 +145,14 @@ export default function AuthWindow() {
         <div className="space-y-4">
           <button
             onClick={() => setMode('login')}
-            className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium shadow-sm"
+            className="w-full py-3 px-4 bg-utrgv-orange text-white rounded-lg hover:bg-utrgv-dark-orange transition-colors font-medium shadow-sm"
           >
             Already have an account? Log in
           </button>
 
           <button
             onClick={() => setMode('signup')}
-            className="w-full py-3 px-4 bg-gradient-to-b from-indigo-500 via-indigo-400 to-indigo-500 text-white rounded-lg hover:from-indigo-600 hover:via-indigo-500 hover:to-indigo-600 transition-colors font-medium shadow-sm"
+            className="w-full py-3 px-4 bg-gradient-to-b from-utrgv-orange via-utrgv-orange to-utrgv-orange text-white rounded-lg hover:from-utrgv-dark-orange hover:via-utrgv-dark-orange hover:to-utrgv-dark-orange transition-colors font-medium shadow-sm"
           >
             Create an account to save your first note!
           </button>
@@ -163,7 +163,7 @@ export default function AuthWindow() {
 
   /* ---------- Login / Signup Form ---------- */
   return (
-    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
+    <div className="bg-gray-100 dark:bg-gray-800 rounded-lg shadow-lg p-8 max-w-md w-full">
       <div className="text-center mb-6">
         <h2 className="text-2xl font-bold text-gray-800 dark:text-white mb-2">
           {mode === 'login' ? 'Welcome Back' : 'Create Account'}
@@ -172,7 +172,7 @@ export default function AuthWindow() {
         <button
           type="button"
           onClick={() => setMode('initial')}
-          className="text-indigo-600 dark:text-indigo-400 hover:underline text-sm"
+          className="text-utrgv-orange dark:text-utrgv-dark-orange hover:underline text-sm"
         >
           ← Back
         </button>
@@ -188,7 +188,7 @@ export default function AuthWindow() {
               name="name"
               value={formData.name || ''}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-utrgv-orange dark:bg-gray-700 dark:text-white"
               placeholder="Enter your full name"
               required
             />
@@ -204,7 +204,7 @@ export default function AuthWindow() {
             name="email"
             value={formData.email}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-utrgv-orange dark:bg-gray-700 dark:text-white"
             placeholder="student@university.edu"
             required
           />
@@ -219,7 +219,7 @@ export default function AuthWindow() {
             name="password"
             value={formData.password}
             onChange={handleInputChange}
-            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+            className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-utrgv-orange dark:bg-gray-700 dark:text-white"
             placeholder="Enter your password"
             required
           />
@@ -235,7 +235,7 @@ export default function AuthWindow() {
               name="confirmPassword"
               value={formData.confirmPassword || ''}
               onChange={handleInputChange}
-              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-indigo-500 dark:bg-gray-700 dark:text-white"
+              className="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-md focus:ring-2 focus:ring-utrgv-orange dark:bg-gray-700 dark:text-white"
               placeholder="Confirm your password"
               required
             />
@@ -248,7 +248,7 @@ export default function AuthWindow() {
 
         <button
           type="submit"
-          className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition-colors font-medium"
+          className="w-full py-3 px-4 bg-utrgv-orange text-white rounded-lg hover:bg-utrgv-dark-orange transition-colors font-medium"
         >
           {mode === 'login' ? 'Log In' : 'Create Account'}
         </button>
