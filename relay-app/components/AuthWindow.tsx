@@ -26,7 +26,6 @@ export default function AuthWindow() {
   const [successMessage, setSuccessMessage] = useState('')
   const router = useRouter()
 
-  //
   useEffect(() => {
     const supabase = createBrowserClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -179,6 +178,18 @@ export default function AuthWindow() {
       </div>
 
       <form onSubmit={handleSubmit} className="space-y-4">
+        {/* Display success or error messages here */}
+        {successMessage && (
+          <div className="text-green-600 dark:text-green-400 text-sm">
+            {successMessage}
+          </div>
+        )}
+        {error && (
+          <div className="text-red-600 dark:text-red-400 text-sm">
+            {error}
+          </div>
+        )}
+
         {mode === 'signup' && (
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
@@ -240,10 +251,6 @@ export default function AuthWindow() {
               required
             />
           </div>
-        )}
-
-        {error && (
-          <div className="text-red-600 dark:text-red-400 text-sm">{error}</div>
         )}
 
         <button
